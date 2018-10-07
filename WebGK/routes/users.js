@@ -48,9 +48,14 @@ app.get("/v1/guantes/:id?", (req, res) => {
  
  // POST
  app.post('/api/v1/guantes', function(req, res) {
-  var guante = req.body;
-  var filtro_guantes = guantes.guantes.filter(x => x.name===guante.nombre);
-  if(filtro_guantes.length>0)
+  var guante = {
+      id: guantes.length + 1,
+      nombre: req.body.nombre,
+      talla: req.body.talla,
+      costo: req.body.costo,
+      Descripcion: req.body.Descripcion
+  };
+  if(!req.body.nombre.length < 2)
   {
       res.writeHead(488, {"Content-Type": "text/plain"});
       res.write("488 Dato ya existente");
@@ -58,7 +63,7 @@ app.get("/v1/guantes/:id?", (req, res) => {
   }
   else
   {
-      guantes.guantes.push(guante);
+      guantes.push(guante);
       res.writeHead(201, {"Content-Type": "application/json"});
       res.write(JSON.stringify({status:"Se realizo el post"}));
       res.end();
@@ -98,18 +103,18 @@ app.put("/api/v1/guantes/:id", (req, res) => {
   var id = req.params.id;
   var filtro_guantes = guantes.guantes.filter(x => x.id==id)
   if( filtro_guantes.length>0 )
-      { 
-          guantes.guantes = guantes.guantes.filter(x => x.id!==id)
-          res.writeHead(204, {"Content-Type": "text/plain"});
-          res.write("Eliminacion Correcta");
-          res.end();
-      }
-      else
-      {
-          res.writeHead(404, {"Content-Type": "text/plain"});
-          res.write("404 Error al eliminar");
-          res.end();
-      }
+  {
+      guantes.guantes = guantes.guantes.filter(x => x.id !== id)
+      guantes.splice(id, 1);
+      res.writeHead(204, { "Content-Type": "text/plain" });
+      res.write("Eliminacion Correcta");
+      res.end();
+  }
+  else {
+      res.writeHead(404, { "Content-Type": "text/plain" });
+      res.write("404 Error al eliminar");
+      res.end();
+  }
  });
 
  //--------------------------------------------
