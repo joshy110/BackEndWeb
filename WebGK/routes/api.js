@@ -70,19 +70,18 @@ app.post('/v1/guantes', function (req, res) {
 // PUT
 app.put("/v1/guantes/:id", (req, res) => {
 
-    var guante = {
-        id: req.body.id,
-        nombre: req.body.nombre,
-        talla: req.body.talla,
-        costo: req.body.costo,
-        Descripcion: req.body.Descripcion
-    };
+    var id = req.params.id;
+    const guante = guantes.guantes.find(x => x.id == id);
     if (req.body.nombre.length < 2) {
         res.writeHead(404, { "Content-Type": "text/plain" });
         res.write("404 Longitud no valida");
         res.end();
     }
     else{
+        guante.nombre = req.body.nombre,
+        guante.talla = req.body.talla,
+        guante.costo = req.body.costo,
+        guante.Descripcion = req.body.Descripcion
         res.writeHead(204, {"Content-Type": "text/plain"});
         res.write("Se logro modificar");
         res.end();
