@@ -89,23 +89,22 @@ app.put("/v1/guantes/:id", (req, res) => {
  });
 
  // DELETE
- app.delete("/v1/deck/:id", (req, res) => {
-  var id = req.params.id;
-  var filtro_guantes = guantes.guantes.filter(x => x.id==id)
-  if( filtro_guantes.length>0 )
-  {
-      guantes.guantes = guantes.guantes.filter(x => x.id !== id)
-      guantes.splice(id, 1);
-      res.writeHead(204, { "Content-Type": "text/plain" });
-      res.write("Eliminacion Correcta");
-      res.end();
-  }
-  else {
-      res.writeHead(404, { "Content-Type": "text/plain" });
-      res.write("404 Error al eliminar");
-      res.end();
-  }
- });
+app.delete("/v1/deck/:id", (req, res) => {
+    var id = req.params.id;
+    const guante = guantes.guantes.find(x => x.id == id)
+    if (req.body.nombre.length < 2) {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.write("404 Longitud no valida");
+        res.end();
+    }
+    else {
+        const identificador = guantes.guantes.indexOf(guante); //Se saca el tamano
+        guantes.guantes.splice(identificador, 1);
+        res.writeHead(204, { "Content-Type": "text/plain" });
+        res.write("Eliminacion Correcta");
+        res.end();
+    }
+});
 
  //--------------------------------------------
 
